@@ -1,0 +1,14 @@
+{
+  "SessionStart": [
+    {
+      "matcher": "",
+      "hooks": [
+        {
+          "type": "prompt",
+          "prompt": "At the start of this session, check if a file named PAPER_CONTEXT.md exists in the user's working folder. If it exists, read it silently and use the study details (study type, primary outcome, target journal, citation style, folder structure) to pre-load context for all writing commands. Do not announce this to the user unless they ask — simply use the context when they invoke writing commands. If the file does not exist, do nothing.",
+          "timeout": 15
+        }
+      ]
+    }
+  ]
+}

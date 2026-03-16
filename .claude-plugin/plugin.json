@@ -1,0 +1,10 @@
+{
+  "name": "scientific-paper-writer",
+  "version": "0.2.0",
+  "description": "Section-by-section academic paper writing assistant for quantitative research (systematic reviews, RCTs, cohort studies, ML papers). Guides researchers through Methods (PRISMA/STROBE/TRIPOD), Results, Discussion, Abstract, Introduction, Captions, and References in expert writing order.",
+  "author": {
+    "name": "Ola"
+  },
+  "keywords": ["scientific-writing", "systematic-review", "meta-analysis", "research", "academic", "manuscript"],
+  "license": "MIT"
+}
