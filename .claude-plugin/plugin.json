@@ -5,10 +5,7 @@
   "author": {
     "name": "Ola"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/olaTechie/scientific-paper-writer"
-  },
+  "repository": "https://github.com/olaTechie/scientific-paper-writer",
   "keywords": [
     "scientific-writing",
     "systematic-review",
