@@ -1,324 +1,251 @@
 # Scientific Paper Writer
 
-A section-by-section academic manuscript writing assistant for quantitative research papers. Supports systematic reviews, meta-analyses, RCTs, cohort studies, and machine learning papers. Methods sections are aligned with **PRISMA 2020**, **STROBE**, **CONSORT**, **TRIPOD+AI**, or **STARD** automatically based on study type.
-
-## Installation
-
-There are three ways to install this plugin depending on how you use Claude.
-
----
-
-### Option 1 — Install from GitHub (Recommended for sharing)
-
-#### Step 1: Clone or download the repository
-```bash
-git clone https://github.com/YOUR-USERNAME/scientific-paper-writer.git
-```
-Or download the ZIP from GitHub → **Code → Download ZIP**, then unzip it.
-
-#### Step 2: Install via Claude Code CLI
-```bash
-# Install directly from the cloned folder
-claude plugin install ./scientific-paper-writer
-
-# Or, if you downloaded and unzipped the repo
-claude plugin install /path/to/scientific-paper-writer
-```
-
-#### Step 3: Install the pre-built .plugin file from a GitHub Release
-If the repository has a published Release with a `.plugin` file attached:
-1. Go to the repository's **Releases** page on GitHub
-2. Download `scientific-paper-writer.plugin` from the latest release assets
-3. In Claude Cowork: drag and drop the `.plugin` file into the plugins panel, then click **Accept**
-4. In Claude Code: run `claude plugin install /path/to/scientific-paper-writer.plugin`
-
----
-
-### Option 2 — Install in Claude Cowork (Desktop App) from a local file
-1. Download `scientific-paper-writer.plugin` from your workspace folder or GitHub Releases
-2. Open the Claude desktop app
-3. Go to **Settings → Plugins** (or click the plug icon in the sidebar)
-4. Click **"Install Plugin"** or drag and drop the `.plugin` file into the plugins panel
-5. Click **"Accept"** when the plugin preview appears
-6. All five commands will now be available in any Cowork session
-
----
-
-### Option 3 — Install in Claude Code from a local file
-```bash
-# Install from the .plugin file
-claude plugin install /path/to/scientific-paper-writer.plugin
-
-# Or install directly from the plugin source folder
-claude plugin install /path/to/scientific-paper-writer/
-```
-
----
-
-### Verify Installation
-After installing, type `/` in the chat to see available commands. You should see:
-- `/write-methods`
-- `/write-results`
-- `/write-discussion`
-- `/write-frontmatter`
-- `/write-captions`
-- `/write-references`
-
----
-
-## Publishing to GitHub
-
-To host this plugin on GitHub so others can install it:
-
-### Step 1 — Create a new GitHub repository
-```bash
-cd scientific-paper-writer
-git init
-git add .
-git commit -m "Release: Scientific Paper Writer plugin v0.2.0"
-```
-
-Create a new repo at https://github.com/new (name it `scientific-paper-writer`), then:
-```bash
-git remote add origin https://github.com/YOUR-USERNAME/scientific-paper-writer.git
-git branch -M main
-git push -u origin main
-```
-
-### Step 2 — Publish a Release with the .plugin file
-1. Go to your repository on GitHub
-2. Click **Releases → Create a new release**
-3. Tag: `v0.1.0`
-4. Title: `Scientific Paper Writer v0.2.0`
-5. Drag and drop `scientific-paper-writer.plugin` into the **Assets** section
-6. Click **Publish release**
-
-Users can now download the `.plugin` file directly from your Releases page and install it in one click.
-
-### Step 3 — Add a badge to your README (optional)
-```markdown
-![Plugin Version](https://img.shields.io/badge/claude--plugin-v0.2.0-blue)
-![Works with Cowork](https://img.shields.io/badge/Claude-Cowork-green)
-```
-
-### Repository structure on GitHub
-The repo should look exactly like this — the plugin files at the root, not nested inside another folder:
-```
-scientific-paper-writer/          ← repository root
-├── .claude-plugin/
-│   └── plugin.json
-├── commands/
-│   ├── write-methods.md
-│   ├── write-results.md
-│   ├── write-discussion.md
-│   ├── write-frontmatter.md
-│   ├── write-captions.md
-│   └── write-references.md
-├── skills/
-│   ├── methods-writing/
-│   │   ├── SKILL.md
-│   │   └── references/
-│   │       └── reporting-guidelines.md
-│   ├── quantitative-results-writing/
-│   ├── discussion-writing/
-│   └── paper-components/
-├── hooks/
-│   └── hooks.json
-└── README.md
-```
-
-### Optional: Set Up Study Context
-To avoid re-explaining your study at the start of each session, create a `PAPER_CONTEXT.md` file in your working folder. See the **Optional: Pre-load Study Context** section below for the template.
+Section-by-section academic manuscript writing assistant for quantitative research. Version 1.0.0.
 
 ---
 
 ## Overview
 
-This plugin guides researchers through writing a complete manuscript in expert writing order — starting with Results, then Discussion, then frontmatter (Abstract and Introduction last). Each section is written step by step, with source materials read before any writing begins. No numbers are invented; all statistics are extracted directly from your analysis outputs and figures.
+Scientific Paper Writer is a Claude plugin that guides researchers through writing a complete manuscript in **expert writing order** -- starting with Methods, then Results, Discussion, and frontmatter last. It supports 11 study types, verifies every citation against multiple databases, and exports to LaTeX or DOCX with venue-specific formatting.
 
-## Writing Order
+**Key principles:**
 
-Experts write papers in this order — not the reading order:
+- **No fabrication** -- all statistics are extracted directly from your analysis outputs, figures, and tables. Values that cannot be verified are flagged with `[PLEASE VERIFY]`.
+- **Guideline-aligned** -- every section follows the appropriate reporting guideline (PRISMA 2020, STROBE, CONSORT, TRIPOD+AI, STARD 2015, CHEERS 2022, COREQ/SRQR, PRISMA-NMA, PRISMA-IPD).
+- **Expert writing order** -- Methods first, Abstract and Title last, following the order that experienced researchers use.
+- **Citation verification** -- every external citation is verified against PubMed, CrossRef, Semantic Scholar, and bioRxiv/medRxiv before inclusion. Unverifiable citations are always flagged, never silently included.
+
+---
+
+## Installation
+
+### Option 1: Install from GitHub (recommended)
+
+```bash
+claude plugin install github:olaTechie/scientific-paper-writer
+```
+
+### Option 2: Install from a release zip
+
+Download the zip from the [Releases page](https://github.com/olaTechie/scientific-paper-writer/releases), then:
+
+```bash
+claude plugin install ./scientific-paper-writer-v1.0.0.zip
+```
+
+### Option 3: Install from local clone
+
+```bash
+git clone https://github.com/olaTechie/scientific-paper-writer.git
+claude plugin install ./scientific-paper-writer
+```
+
+### Verify installation
+
+Type `/` in a Claude session. You should see all 8 commands listed below.
+
+---
+
+## Quick Start
+
+1. Create a `PAPER_CONTEXT.md` file in your working directory (see template below)
+2. Follow the expert writing order:
 
 ```
-1. Methods         → /write-methods
-2. Results         → /write-results
-3. Discussion      → /write-discussion
-4. Abstract        → /write-frontmatter abstract
-5. Introduction    → /write-frontmatter introduction
-6. Title           → /write-frontmatter title
-7. Captions        → /write-captions
-8. References      → /write-references
+/write-methods           Write Methods aligned with the reporting guideline
+/write-results           Write Results from your analysis outputs
+/write-discussion        Write Discussion with verified literature citations
+/write-frontmatter       Write Abstract, Introduction, and Title
+/write-captions          Write figure and table captions
+/write-references        Build and verify the reference list
+/generate-figures        Generate publication-quality figures (R/Python)
+/export-manuscript       Export to LaTeX or DOCX
 ```
+
+---
 
 ## Commands
 
-### `/write-methods [study-type]`
-Writes the Methods section fully aligned with the appropriate reporting guideline.
-
-- **Automatically selects** the correct guideline based on study type:
-  - Systematic review / meta-analysis → **PRISMA 2020**
-  - Observational (cohort, case-control, cross-sectional) → **STROBE**
-  - RCT → **CONSORT 2010**
-  - Prediction / prognostic model → **TRIPOD+AI**
-  - Diagnostic accuracy → **STARD 2015**
-- Writes each subsection separately and pauses for confirmation before proceeding
-- Outputs a **guideline checklist** at the end (✅ / ⚠️ / ❌) flagging any missing items
-- Flags any value it cannot verify with `[PLEASE VERIFY: ___]`
-- For SRMA: covers protocol registration, eligibility (PICOTS), search strategy, study selection, data extraction, risk of bias, effect measures, and full synthesis methods (heterogeneity, subgroup, meta-regression, publication bias, sensitivity)
-- For STROBE: covers study design, setting, participants, variables, data sources, bias, study size, and statistical methods
-- For TRIPOD+AI: covers data source, participants, predictors, sample size, missing data, model development, performance metrics, and internal/external validation
-
-**Example usage:**
-```
-/write-methods
-/write-methods systematic-review
-/write-methods cohort
-/write-methods prediction-model
-```
+| Command | Description | Example |
+|---|---|---|
+| `/write-methods [study-type]` | Write the Methods section aligned with the reporting guideline for your study type | `/write-methods systematic-review` |
+| `/write-results [study-type]` | Write the Results section, extracting all numbers from source materials | `/write-results rct` |
+| `/write-discussion [section]` | Write the Discussion with literature comparison and citation verification | `/write-discussion main-findings` |
+| `/write-frontmatter [section]` | Write Abstract, Introduction, and Title after the body is complete | `/write-frontmatter abstract` |
+| `/write-captions [folder-path]` | Generate publication-ready captions for figures and tables | `/write-captions ./figures/` |
+| `/write-references [style]` | Verify citations and format the reference list | `/write-references vancouver` |
+| `/generate-figures [type]` | Generate figures using R or Python scripts | `/generate-figures forest-plot` |
+| `/export-manuscript [format] [venue]` | Export the manuscript to LaTeX and/or DOCX | `/export-manuscript latex jama` |
 
 ---
 
-### `/write-results [study-type]`
-Writes the Results section step by step.
+## Supported Study Types
 
-- Reads your figures, tables, and analysis outputs before writing
-- Adapts to study type: `systematic-review`, `rct`, `cohort`, `ml`, or describe your own
-- Writes one subsection at a time and confirms before proceeding
-- Flags any unclear values as `[UNCLEAR IN SOURCE — please verify]`
-
-**Example usage:**
-```
-/write-results systematic-review
-/write-results rct
-/write-results cohort
-```
-
----
-
-### `/write-discussion [section]`
-Writes the Discussion section step by step.
-
-- Searches PubMed and the web for comparison literature before writing Main Findings
-- Only cites verified, PubMed-indexed sources
-- Flags unverifiable citations as `[Citation needed — unable to verify in PubMed]`
-- Optionally write one section at a time
-
-**Section options:** `main-findings`, `policy`, `strengths-limitations`, `conclusion`, `all`
-
-**Example usage:**
-```
-/write-discussion
-/write-discussion main-findings
-/write-discussion conclusion
-```
+| Identifier | Reporting Guideline | Key Features |
+|---|---|---|
+| `systematic-review` | PRISMA 2020 | PRISMA flow, risk of bias, pooled estimates, heterogeneity, subgroup/sensitivity analyses |
+| `network-meta-analysis` | PRISMA-NMA | Network geometry, inconsistency testing, SUCRA/P-score rankings, league tables |
+| `ipd-meta-analysis` | PRISMA-IPD | One-stage/two-stage models, participant-level subgroups, missing data handling |
+| `dose-response` | PRISMA 2020 + dose-response extensions | Restricted cubic splines, non-linearity testing, threshold detection |
+| `bayesian-meta-analysis` | PRISMA 2020 + Bayesian extensions | Prior specification, MCMC diagnostics, posterior summaries, model comparison |
+| `rct` | CONSORT 2010 | CONSORT flow, ITT/PP analyses, primary/secondary outcomes, adverse events |
+| `observational` | STROBE | Cohort/case-control/cross-sectional, crude + adjusted estimates, bias assessment |
+| `economic-evaluation` | CHEERS 2022 | Cost-effectiveness analysis, ICER, sensitivity analyses, CEAC, budget impact |
+| `prediction-model` | TRIPOD+AI | Model development, calibration, discrimination, internal/external validation |
+| `diagnostic-accuracy` | STARD 2015 | STARD flow, sensitivity/specificity, ROC analysis, likelihood ratios |
+| `qualitative` | COREQ / SRQR | Thematic/framework analysis, reflexivity, trustworthiness, transferability |
 
 ---
 
-### `/write-frontmatter [section]`
-Writes Abstract, Introduction, and Title — after the body is complete.
+## Output Formats
 
-- Extracts all numbers directly from your completed Results section
-- Adapts abstract format to your target journal
-- Verifies all Introduction citations via PubMed before including
-- Offers three title variants for you to choose from
-
-**Section options:** `abstract`, `introduction`, `title`, `all`
-
-**Journal formats supported:** JAMA Network, Lancet, BMJ, Annals of Internal Medicine, Nature Medicine, or generic structured
-
-**Example usage:**
-```
-/write-frontmatter abstract
-/write-frontmatter introduction
-/write-frontmatter all
-```
+| Format | Description |
+|---|---|
+| **Markdown** | Default output for all writing commands. Clean `.md` ready for manuscript editing. |
+| **LaTeX (generic)** | Standard article template with line numbers and double spacing. |
+| **LaTeX (JAMA)** | JAMA Network template with Key Points box and structured abstract sections. |
+| **LaTeX (Lancet)** | Lancet template with Research in Context panel. |
+| **DOCX** | Pandoc-based export with professional reference template (Times New Roman, double-spaced). |
 
 ---
 
-### `/write-captions [folder-path]`
-Writes standalone publication-ready captions for all figures and tables.
+## Citation Verification
 
-- Reads every figure and table image in the specified folder
-- Writes self-contained captions with abbreviation footnotes
-- Numbers figures and eFigures correctly
-- Optionally saves as a formatted Word document
+Every citation passes through a 4-source verification pipeline before inclusion:
 
-**Example usage:**
+1. **PubMed** (first) -- search by title or author+year. Retrieve PMID, DOI, full metadata.
+2. **CrossRef** (second) -- query the CrossRef API. Match by title similarity (>85% threshold).
+3. **Semantic Scholar** (third) -- query the Semantic Scholar Graph API. Extract paper ID, DOI, venue.
+4. **bioRxiv/medRxiv** (fourth) -- search preprints. Check whether a published version exists.
+
+If a citation cannot be verified through any source, it is flagged:
+
 ```
-/write-captions
-/write-captions /path/to/figures/folder
+[UNVERIFIED -- not found in PubMed, CrossRef, Semantic Scholar, or bioRxiv. Please check manually]
 ```
+
+Citations are never fabricated. Missing metadata fields are marked (e.g., `[year unknown]`, `[DOI unknown]`).
 
 ---
 
-### `/write-references [citation-style]`
-Builds and verifies the complete reference list.
+## PAPER_CONTEXT.md Template
 
-- Verifies each citation against PubMed before formatting
-- Flags unverifiable citations rather than silently including them
-- Cross-checks in-text citation numbers against the reference list
+Create this file in your working directory to pre-load study context across all commands.
 
-**Style options:** `vancouver` (default), `apa`, `ama`, `chicago`, `nature`
-
-**Example usage:**
-```
-/write-references
-/write-references vancouver
-/write-references apa
-```
-
----
-
-## Optional: Pre-load Study Context
-
-Create a file named `PAPER_CONTEXT.md` in your working folder to pre-load your study details at the start of each session. Claude will read it silently and use the context across all writing commands.
-
-**Template:**
 ```markdown
 # Paper Context
 
 ## Study Details
 - Study type: systematic review and meta-analysis
 - Primary outcome: vaccine effectiveness against laboratory-confirmed pertussis
-- Population: adults aged ≥18 years
+- Population: adults aged >=18 years
 - Target journal: JAMA Network Open
 - Citation style: Vancouver
 - Abstract word limit: 350
 
 ## Folder Structure
-- Figures folder: ./For_Caption/
-- Draft report: ./DraftReport/Draft_report.pdf
-- Analysis outputs: ./06_results_waning_analyses_v2/
+- Figures folder: ./figures/
+- Draft report: ./drafts/report.pdf
+- Analysis outputs: ./results/
 
 ## Conventions
 - UK English spelling throughout
-- VE% = (1 − OR) × 100
-- Report heterogeneity: I², τ², Q, 95% prediction interval
+- VE% = (1 - OR) x 100
+- Report heterogeneity: I-squared, tau-squared, Q, 95% prediction interval
 - Distinguish absolute VE from relative VE
 ```
 
 ---
 
-## Supported Study Types
+## Optional Integrations
 
-| Study Type | Results Subsections Covered |
-|---|---|
-| Systematic review / meta-analysis | PRISMA flow, characteristics, risk of bias, pooled estimates, sensitivity analyses, subgroup analyses, waning/meta-regression |
-| RCT | CONSORT flow, baseline characteristics, primary/secondary outcomes, adverse events |
-| Cohort / observational | Population flow, characteristics, crude + adjusted estimates, sensitivity analyses, subgroup analyses |
-| Machine learning | Data split, primary metric (AUC), secondary metrics, calibration, comparison, feature importance, fairness |
+Scientific Paper Writer works standalone but can optionally enhance its capabilities when the [claude-scientific-writer](https://github.com/example/claude-scientific-writer) plugin is also installed.
 
-## Citation Verification
+When detected, the integrations engine:
 
-All external citations are verified via PubMed or web search before inclusion. Unverifiable citations are always flagged — never silently included or fabricated.
+- Uses enhanced literature search capabilities if available
+- Coordinates shared PAPER_CONTEXT.md between plugins
+- Avoids duplicating functionality that the companion plugin provides
 
-## Output Format
+Detection is automatic and graceful -- the plugin works identically whether or not the companion is installed.
 
-All sections are output as clean Markdown (`.md`), ready to paste into your manuscript or convert to Word/PDF using other tools.
+---
+
+## Expert Writing Order
+
+Experienced researchers write papers in this order, not the reading order:
+
+```
+1. Methods         /write-methods          What you did (most concrete)
+2. Results         /write-results          What you found (from outputs)
+3. Discussion      /write-discussion       What it means (needs Results)
+4. Abstract        /write-frontmatter      Summary (needs all sections)
+5. Introduction    /write-frontmatter      Context (needs Abstract)
+6. Title           /write-frontmatter      Distillation (needs everything)
+7. Captions        /write-captions         Standalone figure descriptions
+8. References      /write-references       Final verification pass
+```
+
+This order ensures each section is written with the information it depends on already complete.
+
+---
+
+## Repository Structure
+
+```
+scientific-paper-writer/
+  .claude-plugin/
+    plugin.json
+  commands/
+    write-methods.md
+    write-results.md
+    write-discussion.md
+    write-frontmatter.md
+    write-captions.md
+    write-references.md
+    generate-figures.md
+    export-manuscript.md
+  skills/
+    core/                       Core prose conventions and verification flags
+    citations/                  Multi-source citation verification engine
+    visual/                     Figure interpretation and caption generation
+    output/                     LaTeX, DOCX, and abstract format engine
+    integrations/               Optional plugin detection
+    study-types/
+      systematic-review/        PRISMA 2020
+      network-meta-analysis/    PRISMA-NMA
+      ipd-meta-analysis/        PRISMA-IPD
+      dose-response/            Dose-response meta-analysis
+      bayesian-meta-analysis/   Bayesian meta-analysis
+      rct/                      CONSORT 2010
+      observational/            STROBE
+      economic-evaluation/      CHEERS 2022
+      prediction-model/         TRIPOD+AI
+      diagnostic-accuracy/      STARD 2015
+      qualitative/              COREQ / SRQR
+  templates/
+    latex/                      LaTeX templates (generic, JAMA, Lancet)
+    figures/                    R script templates (forest, PRISMA, funnel)
+    docx/                       DOCX reference template
+  hooks/
+    hooks.json
+  build-release.sh
+  LICENSE
+  README.md
+```
 
 ---
 
 ## Setup
 
-No external API keys or MCP servers required. The plugin uses Claude's built-in web search and PubMed tools for citation verification.
+No external API keys required. The plugin uses Claude's built-in web search, PubMed tools, and bioRxiv tools for citation verification and literature search.
+
+For figure generation, R (with metafor, DiagrammeR packages) or Python (with matplotlib) should be available on your system. If neither is available, the plugin generates script files for manual execution.
+
+For DOCX export, [pandoc](https://pandoc.org/) is required: `brew install pandoc` (macOS) or `apt install pandoc` (Linux).
+
+---
+
+## License
+
+MIT License. See [LICENSE](LICENSE) for details.
