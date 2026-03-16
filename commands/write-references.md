@@ -1,82 +1,74 @@
 ---
-description: Build and verify the reference list section by section
-allowed-tools: Read, WebSearch, WebFetch, Bash
-argument-hint: [style] e.g. vancouver, apa, ama, chicago
+allowed-tools: Read, Write, Glob, Grep, WebSearch, WebFetch, Bash
+argument-hint: "[style] e.g. vancouver, apa, ama, nature, chicago, ieee"
+description: "Verify citations via multi-source pipeline and format the reference list"
 ---
 
-You are helping a researcher build a verified, formatted reference list for a quantitative research paper.
+# /write-references
 
-## Step 1 — Gather Context
+## Step 1: Load core conventions
 
-Ask (only what is not already clear from $ARGUMENTS or context):
-1. What citation style is required? (Vancouver, APA, AMA, Chicago, IEEE, Nature, other)
-2. Which sections need references compiled? (Introduction only / Discussion only / All sections / Specific section)
-3. Is there a completed draft to extract citations from, or will the researcher provide a list of references to format?
+Read `skills/core/SKILL.md` for shared conventions (prose rules, precision, verification flags, no-fabrication guarantee).
 
-If $ARGUMENTS specifies a citation style (e.g., "vancouver"), use that style throughout.
+## Step 2: Determine citation style
 
-## Step 2 — Extract Citations from Draft
+If provided as argument (`$ARGUMENTS`), use that as the citation style. Otherwise, check `PAPER_CONTEXT.md` for a `Citation style` or `Target journal` field. If still unknown, ask the user:
+- Vancouver (numbered, superscript in-text)
+- APA (author-year in-text)
+- AMA (numbered superscript)
+- Nature (numbered, bracketed in-text)
+- Chicago (author-date or notes-bibliography)
+- IEEE (numbered, bracketed in-text)
 
-If a completed manuscript draft is available:
-- Use Read to load the draft
-- Identify all in-text citation markers (numbered superscripts, author-year, etc.)
-- List all cited works: "I found [N] citations. Let me now verify each one."
+## Step 3: Load citation engine and style guide
 
-If the researcher provides a list:
-- Accept the list and proceed to verification.
+Read `skills/citations/SKILL.md` for the multi-source verification pipeline. Read `skills/citations/references/citation-styles.md` for formatting rules specific to the selected style.
 
-## Step 3 — Verify Each Reference
+## Step 4: Check for optional integrations
 
-For each cited work, verify it is real and accurately cited:
-- Use WebSearch or WebFetch to locate the PubMed entry: https://pubmed.ncbi.nlm.nih.gov/[PMID]/
-- Extract: all authors (last name + initials), title, journal name (abbreviated per NLM style for Vancouver/AMA), year, volume, issue, pages, DOI, PMID
-- For guidelines and reports (WHO, CDC, NICE): use official website URL and access date
-- For books: authors, title, edition, publisher, year, chapter if applicable
-- Flag any reference that cannot be verified: [UNVERIFIED — please check manually]
-- Do NOT fabricate or invent citations under any circumstances
+Read `skills/integrations/SKILL.md`. Run detection if this is the first command invocation this session. If `citation-management` integration is detected, delegate to it for Google Scholar + BibTeX workflows.
 
-## Step 4 — Format References by Style
+## Step 5: Read manuscript and extract citations
 
-### Vancouver Style (numbered, superscript in-text)
-Format: Author AA, Author BB, Author CC. Title of article. *Journal Abbrev*. Year;Volume(Issue):Pages. doi:XX.XXXX/XXXXX PMID: XXXXXXXX
+Read the manuscript draft. Use Glob to find all written sections:
+- `**/*methods*.md`, `**/*results*.md`, `**/*discussion*.md`, `**/*abstract*.md`, `**/*introduction*.md`
 
-Example:
-1. Wilkinson K, Righolt CH, Elliott LJ, Fanella S, Mahmud SM. Pertussis vaccine effectiveness and duration of protection — a systematic review and meta-analysis. *Vaccine*. 2021;39(23):3120–3130. doi:10.1016/j.vaccine.2021.04.032 PMID: 33934917
+Read each section and extract all in-text citation markers (numbered superscripts, author-year references, or placeholder markers like `[REF]`).
 
-Rules:
-- Up to 6 authors; if more, list first 6 then "et al."
-- Journal names abbreviated per NLM standard
-- Article titles: sentence case
-- Volume and issue in format: 39(23)
-- Pages with en-dash (3120–3130), not hyphen
+List all cited works: "I found [N] citation markers. Let me now verify each one."
 
-### APA Style (author-year in-text)
-Format: Author, A. A., & Author, B. B. (Year). Title of article. *Journal Name*, *Volume*(Issue), Pages. https://doi.org/XXXXX
+## Step 6: Verify and format references
 
-### AMA Style (numbered superscript)
-Format: Author AA, Author BB. Title of article. *Journal Name*. Year;Volume(Issue):Pages. doi:XXXXX
+For each citation, run the 4-source verification pipeline from `skills/citations/SKILL.md`:
 
-### Nature Style (numbered, bracketed in-text)
-Format: Author, A. A. et al. Title of article. *J. Abbrev.* **Volume**, Pages (Year). https://doi.org/XXXXX
+1. **PubMed** — Search by title/author, extract PMID, DOI, full metadata
+2. **CrossRef** — Verify DOI, extract additional metadata if PubMed incomplete
+3. **Semantic Scholar** — Cross-check, find alternative identifiers
+4. **bioRxiv** — Check for preprints, identify preprint-to-published upgrades
 
-## Step 5 — Output the Reference List
+For each verified reference:
+- Normalise metadata (author names, journal abbreviations, page ranges with en-dash)
+- Format per the selected citation style
+- Check for preprint-to-published upgrades (suggest replacing preprints with published versions)
 
-Present the complete reference list:
-- Numbered sequentially from 1 (Vancouver / AMA / Nature) or alphabetically by first author (APA)
-- Each entry on a new line
-- Include DOI and PMID (where available) for all journal articles
-- Group by section if the researcher wants (Introduction references / Discussion references)
-- Confirm the total count: "Reference list complete: [N] references verified."
+After all references are formatted:
+- Number sequentially from 1 (Vancouver/AMA/Nature/IEEE) or sort alphabetically by first author (APA/Chicago)
+- Cross-reference in-text citation numbers against the reference list
+- Flag any discrepancies between in-text markers and the reference list
+- Flag any reference that cannot be verified: `[UNVERIFIED — please check manually]`
 
-## Step 6 — Cross-Check In-Text Citations
+**Critical rule:** Do NOT fabricate or invent citations under any circumstances.
 
-If a completed draft is available:
-- Verify that every in-text citation number matches the correct reference in the list
-- Flag any discrepancies: "⚠️ Citation [4] in the Discussion appears to reference a different paper than Reference 4 in the list."
-- Do not silently correct — flag and ask the researcher to confirm the intended citation
+## Step 7: Output verification summary
 
-## Formatting Rules
-- UK English spelling in reference titles where applicable
-- Italicise journal names in Markdown using *asterisks*
-- Bold volume numbers for Nature style using **double asterisks**
-- Use en-dash (–) not hyphen (-) in page ranges
+After all references are processed, output a verification summary:
+- N references verified (with source: PubMed / CrossRef / Semantic Scholar)
+- N references unverified (flagged for manual review)
+- N preprint-to-published upgrade suggestions
+- Any in-text citation numbering discrepancies
+
+## Step 8: Save output
+
+Ask the user where to save the completed reference list. Write to file using the Write tool. If `PAPER_CONTEXT.md` specifies a `Manuscript output` folder, suggest saving there.
+
+Include DOI and PMID (where available) for all journal articles in the output.

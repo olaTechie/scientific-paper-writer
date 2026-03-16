@@ -1,98 +1,89 @@
 ---
-description: Write Discussion section step by step with literature contextualisation
-allowed-tools: Read, WebSearch, WebFetch, Task
-argument-hint: [section] e.g. main-findings, policy, strengths-limitations, conclusion, all
+allowed-tools: Read, Write, Glob, Grep, WebSearch, WebFetch, Task
+argument-hint: "[section] e.g. main-findings, policy, strengths-limitations, conclusion, all"
+description: "Write the Discussion section with literature comparison and multi-source citation verification"
 ---
 
-You are helping a researcher write the Discussion section of a quantitative research paper. Write each subsection sequentially, confirming with the researcher before moving to the next.
+# /write-discussion
 
-## Step 1 — Load Context
+## Step 1: Load core conventions
 
-Before writing:
-- Ask the researcher: "Do you have a completed Results section or draft report I should read first?"
-- If yes, use Read to load it and extract the key numerical findings
-- Identify: primary outcome estimate, direction and magnitude of secondary findings, any null results, key limitations flagged in analysis
-- Ask: which subsections do they need? (Main Findings / Policy & Future Research / Strengths & Limitations / Conclusion / All)
+Read `skills/core/SKILL.md` for shared conventions (prose rules, precision, verification flags, no-fabrication guarantee).
 
-If $ARGUMENTS specifies a section, write only that section.
+## Step 2: Determine study type
 
-## Step 2 — Main Findings (and Comparison with Literature)
+If the study type was pre-loaded from `PAPER_CONTEXT.md`, use it. If provided as argument (`$ARGUMENTS`), use that. Otherwise, ask the user using the study-type list from the core skill:
 
-### 2a. Summarise Own Findings
-Write 1 paragraph (~200 words) that:
-- Restates primary quantitative finding with full statistics (point estimate, 95% CI, heterogeneity if applicable)
-- Mirrors the hierarchy of Results: primary outcome → secondary outcomes → subgroup/exploratory analyses
-- States effect magnitude in plain language (e.g., "moderate protection", "substantial reduction")
-- Flags null results or non-significant trends without overclaiming
-- Does NOT use causal language unless design supports it
+- `systematic-review` — Systematic Review / Pairwise Meta-Analysis (PRISMA 2020)
+- `network-meta-analysis` — Network Meta-Analysis (PRISMA-NMA)
+- `ipd-meta-analysis` — Individual Patient Data Meta-Analysis (PRISMA-IPD)
+- `dose-response` — Dose-Response Meta-Analysis
+- `bayesian-meta-analysis` — Bayesian Meta-Analysis
+- `rct` — Randomised Controlled Trial (CONSORT 2010)
+- `observational` — Observational: Cohort, Case-Control, Cross-Sectional (STROBE)
+- `economic-evaluation` — Economic Evaluation: CEA/CUA/CBA (CHEERS 2022)
+- `prediction-model` — Prediction/Prognostic Model or Generic ML (TRIPOD+AI)
+- `diagnostic-accuracy` — Diagnostic Accuracy Study (STARD 2015)
+- `qualitative` — Qualitative / Mixed Methods (COREQ/SRQR)
 
-### 2b. Compare with Prior Literature
-Search before writing. Use WebSearch or PubMed tools to find:
-- Recent (last 5–7 years) systematic reviews, meta-analyses, or major cohort studies on the same topic
+## Step 3: Load study-type module and citation engine
+
+Read `skills/study-types/<study-type>/SKILL.md` and all files in `skills/study-types/<study-type>/references/`. Load Section 4 (Discussion Considerations) from the study-type SKILL.md for guidance specific to this study type's Discussion.
+
+Also read `skills/citations/SKILL.md` for citation verification pipeline. The Discussion section requires verified citations for literature comparison.
+
+## Step 4: Check for optional integrations
+
+Read `skills/integrations/SKILL.md`. Run detection if this is the first command invocation this session. If `scientific-writing` is detected, use its two-stage outline-then-prose workflow. If `research-lookup` integration is detected, use it for literature search during the Main Findings section.
+
+## Step 5: Read source materials and search literature
+
+Ask the user for the completed Results section (or draft report). Read it and extract: primary outcome estimate, direction and magnitude of secondary findings, any null results, key limitations flagged in analysis.
+
+BEFORE writing Main Findings, search PubMed for comparison literature:
+- Recent (last 5-7 years) systematic reviews, meta-analyses, or major cohort studies on the same topic
 - Prioritise pooled evidence (SRMAs) over individual studies
-- Only cite verified, PubMed-indexed sources
-- Flag any unverifiable citations as: [Citation needed — unable to verify in PubMed]
-- Do NOT fabricate citations
+- Use the citation engine pipeline from `skills/citations/SKILL.md` to verify all found references
 
-Write 1–2 paragraphs (~200–300 words) that:
+If `PAPER_CONTEXT.md` specifies a `Source materials` folder, check there first.
+
+## Step 6: Write section by section
+
+Write the Discussion in the canonical order. If `$ARGUMENTS` specifies a particular section, write only that section. For each subsection:
+
+1. Draft the subsection
+2. Apply core conventions: present tense for established knowledge, past tense for own findings, UK English, full paragraphs
+3. Present the drafted subsection to the user for confirmation
+4. Wait for approval before proceeding to the next subsection
+
+### Canonical Discussion order:
+
+**Main Findings** (~200 words own findings + ~200-300 words literature comparison + ~100 words mechanistic plausibility):
+- Restate primary quantitative finding with full statistics (point estimate, 95% CI, heterogeneity if applicable)
+- Mirror the hierarchy of Results: primary outcome, secondary outcomes, subgroup/exploratory analyses
 - Compare own findings with prior pooled estimates (consistent / divergent / extends prior work)
 - Explain divergences (methodological differences, population differences, time period)
-- Situate findings within broader evidence landscape
+- Provide biological or mechanistic plausibility if relevant (brief, evidence-based, no speculation)
 
-### 2c. Biological or Mechanistic Plausibility (optional — include if relevant)
-Write 1 brief paragraph (~100 words) that:
-- Provides scientific rationale for the observed findings
-- Draws on immunological, biological, or mechanistic evidence
-- Avoids speculation beyond what the literature supports
+**Policy & Future Research** (~400-500 words):
+- Link recommendations directly to findings — do not overclaim
+- Distinguish: what the evidence supports now vs what remains uncertain
+- Be specific about future research: name study designs, populations, settings, comparators
 
-**Citation style:** Vancouver numbering, starting from 1. Full reference list with DOI and PMID at end of section. Limit to 5–8 strategic, high-quality citations.
+**Strengths & Limitations** (~300-400 words):
+- Strengths (~40% of section): specific, not generic praise — pre-specified protocol, comprehensive search, methodological innovation, reporting standards
+- Limitations (~60% of section): 4-5 major limitations only, for each state the limitation and likely direction of bias
 
-## Step 3 — Policy Implications and Future Research
+**Conclusion** (3-5 sentences):
+- Restate main finding, state what this study adds, acknowledge one key limitation (optional), state what should happen next
 
-Write 2 paragraphs (~400–500 words total):
+**Citation rules:**
+- Vancouver numbering from 1
+- Verify all citations via the citation engine pipeline (PubMed, CrossRef, Semantic Scholar, bioRxiv)
+- Limit to 8-15 references total
+- Flag any unverifiable citation: `[Citation needed — unable to verify]`
+- Do NOT fabricate citations
 
-**Policy paragraph:**
-- Link recommendations directly to findings — do not make claims beyond the evidence
-- Distinguish clearly: what the evidence supports now vs what remains uncertain
-- Acknowledge study limitations that affect policy generalisability
-- Reference existing guidelines only if verifiable (cite WHO, NICE, CDC, etc. with source)
-- Avoid advocacy tone
+## Step 7: Save output
 
-**Future research paragraph:**
-- Be specific and methodological — name study designs, populations, settings
-- Address: specific evidence gaps, better measurement approaches, populations needing replication
-- Consider: registry-based studies, head-to-head comparisons, economic evaluations, LMIC settings
-- Specify age groups, comparator types, follow-up durations as needed
-
-## Step 4 — Strengths and Limitations
-
-Write 2 paragraphs, targeting 300–400 words total:
-
-**Strengths paragraph (~40% of section):**
-- Be specific — not generic praise
-- Cover: pre-specified protocol, comprehensive search, methodological innovation, reporting standards (PRISMA, CONSORT, STROBE etc.), heterogeneity assessment, sensitivity analyses, risk of bias tools
-
-**Limitations paragraph (~60% of section):**
-- Cover 4–5 major limitations only
-- For each: state the limitation, indicate likely direction of bias, avoid vague language
-- Do NOT invent limitations
-- Do NOT repeat Methods text
-- Avoid defensive tone
-
-## Step 5 — Conclusion
-
-Write a single paragraph of 3–5 sentences:
-1. Restate the main finding (1 sentence)
-2. State what this study adds (1 sentence)
-3. Acknowledge one key limitation (optional)
-4. State what should happen next (policy refinement or further research)
-
-No hyperbole. No new data. No new citations unless absolutely essential.
-
-## Formatting Rules
-
-- Full paragraphs with flowing prose — never bullet points
-- UK English spelling throughout
-- Vancouver citations in superscript where they appear in text
-- Output each subsection as a clearly labelled Markdown section (## heading)
-- Provide full reference list at the end, numbered from 1, with DOI and PMID
+Ask the user where to save the completed Discussion section. Write to file using the Write tool. If `PAPER_CONTEXT.md` specifies a `Manuscript output` folder, suggest saving there.

@@ -1,78 +1,65 @@
 ---
-description: Write Results section step by step for any quantitative paper
 allowed-tools: Read, Write, Glob, Grep, WebSearch, Task
-argument-hint: [study-type] e.g. systematic-review, rct, cohort, ml
+argument-hint: "[study-type] e.g. systematic-review, rct, cohort, prediction-model"
+description: "Write the Results section, extracting all numbers directly from source materials"
 ---
 
-You are helping a researcher write the Results section of a quantitative research paper. Follow this workflow precisely.
+# /write-results
 
-## Step 1 — Gather Context
+## Step 1: Load core conventions
 
-Ask the researcher the following (use AskUserQuestion if available, otherwise ask in chat):
-1. What type of study is this? (systematic review/meta-analysis, RCT, cohort/observational, machine learning, other)
-2. What is the primary outcome or main analysis?
-3. Where are the figures and tables stored? (ask for folder path or filenames)
-4. Are there any pre-specified subsections they want to follow (e.g., PRISMA flow, risk of bias, primary analysis, subgroup analyses, sensitivity analyses)?
-5. Is there a draft report or protocol document to read first?
+Read `skills/core/SKILL.md` for shared conventions (prose rules, precision, verification flags, no-fabrication guarantee).
 
-If $ARGUMENTS is provided, treat it as the study type and skip that question.
+## Step 2: Determine study type
 
-## Step 2 — Read Source Materials
+If the study type was pre-loaded from `PAPER_CONTEXT.md`, use it. If provided as argument (`$ARGUMENTS`), use that. Otherwise, ask the user using the study-type list from the core skill:
 
-Before writing anything:
-- Use Glob to list all files in the figures/tables folder the user specifies
-- Use Read to open any PDF, draft report, analysis output, or protocol document provided
-- Read figures and forest plots as images to extract numerical values
-- Never invent or estimate numbers — only use values explicitly visible in source materials
-- If a value is unclear, flag it as [UNCLEAR IN SOURCE — please verify] and continue
+- `systematic-review` — Systematic Review / Pairwise Meta-Analysis (PRISMA 2020)
+- `network-meta-analysis` — Network Meta-Analysis (PRISMA-NMA)
+- `ipd-meta-analysis` — Individual Patient Data Meta-Analysis (PRISMA-IPD)
+- `dose-response` — Dose-Response Meta-Analysis
+- `bayesian-meta-analysis` — Bayesian Meta-Analysis
+- `rct` — Randomised Controlled Trial (CONSORT 2010)
+- `observational` — Observational: Cohort, Case-Control, Cross-Sectional (STROBE)
+- `economic-evaluation` — Economic Evaluation: CEA/CUA/CBA (CHEERS 2022)
+- `prediction-model` — Prediction/Prognostic Model or Generic ML (TRIPOD+AI)
+- `diagnostic-accuracy` — Diagnostic Accuracy Study (STARD 2015)
+- `qualitative` — Qualitative / Mixed Methods (COREQ/SRQR)
 
-## Step 3 — Write Section by Section
+## Step 3: Load study-type module
 
-Write each Results subsection sequentially. After completing each subsection, pause and confirm with the researcher before proceeding to the next. Use this default order (adapt to study type):
+Read `skills/study-types/<study-type>/SKILL.md` and all files in `skills/study-types/<study-type>/references/`. Load Section 3 (Results Conventions) from the study-type SKILL.md for the canonical Results subsection order and guidance.
 
-**Systematic Review / Meta-Analysis order:**
-1. Study Selection (PRISMA flow: identified → screened → eligible → included; reasons for exclusion)
-2. Study Characteristics (design, setting, dates, population, comparators, outcome definitions)
-3. Risk of Bias (tool used, judgements by domain, overall summary)
-4. Primary Analysis (pooled estimate with 95% CI, heterogeneity: I², τ², Q-test, 95% prediction interval)
-5. Sensitivity Analyses (each selection rule variant; direction and magnitude of change)
-6. Subgroup Analyses (pre-specified subgroups; test for subgroup difference p-value)
-7. Secondary or Exploratory Analyses (e.g., waning immunity, dose-response, meta-regression)
+Also read `skills/visual/SKILL.md` for figure interpretation guidance — this is needed to extract numerical values from figures before writing.
 
-**RCT order:**
-1. Participant Flow (CONSORT: randomised, allocated, lost to follow-up, analysed)
-2. Baseline Characteristics (demographics, clinical characteristics by arm)
-3. Primary Outcome (ITT analysis: effect estimate, 95% CI, p-value, NNT if applicable)
-4. Secondary Outcomes (each pre-specified secondary endpoint)
-5. Subgroup Analyses (interaction test p-value; avoid over-interpretation)
-6. Adverse Events and Safety
+## Step 4: Check for optional integrations
 
-**Cohort / Observational order:**
-1. Study Population (inclusion/exclusion, N at each stage)
-2. Participant Characteristics (by exposure group)
-3. Primary Association (crude and adjusted effect estimates, confounders in final model)
-4. Sensitivity Analyses (e.g., different covariate sets, restriction analyses)
-5. Subgroup Analyses
+Read `skills/integrations/SKILL.md`. Run detection if this is the first command invocation this session. If `scientific-writing` is detected, use its two-stage outline-then-prose workflow. Otherwise, use the built-in section-by-section approach.
 
-**Machine Learning order:**
-1. Data Description (training/validation/test split sizes, class balance)
-2. Model Performance — Primary Metric (AUC, accuracy, F1 — whichever was pre-specified)
-3. Secondary Metrics (sensitivity, specificity, PPV, NPV, calibration)
-4. Comparison with Baseline or Prior Models
-5. Feature Importance or Explainability
-6. Subgroup or Fairness Analyses
+## Step 5: Read source materials
 
-## Step 4 — Formatting Rules
+Ask the user for the location of source materials (figures, tables, forest plots, analysis output, data files). Emphasise reading figures and tables first — these are the primary source of numerical data for the Results section. Use the visual engine guidance from `skills/visual/SKILL.md` to interpret any figures before writing.
 
-- Write in full paragraphs with flowing prose — never bullet points in the final text
+If `PAPER_CONTEXT.md` specifies a `Source materials` folder, check there first. Read all relevant files using the Read tool.
+
+**Critical rule:** Never invent or estimate numbers. Only use values explicitly visible in source materials. If a value is unclear, flag it as `[UNCLEAR IN SOURCE — please verify]`.
+
+## Step 6: Write section by section
+
+Follow the canonical Results subsection order from Section 3 of the study-type SKILL.md. For each subsection:
+
+1. Draft the subsection using the prose guidance and template sentences from the SKILL.md
+2. Apply core conventions: past tense, UK English, full paragraphs, precise quantification, verification flags for missing details
+3. Present the drafted subsection to the user for confirmation
+4. Wait for approval before proceeding to the next subsection
+
+**Key rules specific to Results:**
+- NO citations in Results — all claims come from the study's own data
+- Cross-reference all figures and tables inline (Figure 1, Table 2, eFigure 1, eTable 1)
+- Every finding needs: point estimate + 95% CI + p-value + sample size (where applicable)
 - Report numbers to one decimal place for percentages; two decimal places for CIs and p-values
-- Use passive voice where appropriate for scientific register
-- Do NOT cite references in Results — all claims come from the study's own data
-- Cross-reference figures and tables inline: (Figure 1), (Table 2), (eFigure 1)
-- Flag all figure/table references so the researcher can verify placement
-- Output each subsection as a clearly labelled Markdown section (## heading)
-- UK English spelling throughout
+- Write in full paragraphs with flowing prose — never bullet points in the final text
 
-## Step 5 — Output
+## Step 7: Save output
 
-Produce each subsection as clean Markdown, ready to paste into the manuscript. After each subsection, ask: "Shall I continue to the next section, or would you like to revise this one first?"
+Ask the user where to save the completed Results section. Write to file using the Write tool. If `PAPER_CONTEXT.md` specifies a `Manuscript output` folder, suggest saving there.

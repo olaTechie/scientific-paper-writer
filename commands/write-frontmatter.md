@@ -1,91 +1,88 @@
 ---
-description: Write Abstract, Introduction, and Title after the body is complete
-allowed-tools: Read, WebSearch, WebFetch, Task
-argument-hint: [section] e.g. abstract, introduction, title, all
+allowed-tools: Read, Write, Glob, Grep, WebSearch, WebFetch, Task
+argument-hint: "[section] e.g. abstract, introduction, title, all"
+description: "Write the Abstract, Introduction, and Title after the manuscript body is complete"
 ---
 
-You are helping a researcher write the frontmatter of a quantitative research paper — the Abstract, Introduction, and Title. These are written AFTER the Results and Discussion are complete, because they summarise the completed work.
+# /write-frontmatter
 
-## Step 1 — Load Completed Sections
+## Step 1: Load core conventions
 
-Before writing anything:
-- Ask the researcher: "Can you share your completed Results and Discussion sections, or a draft report?"
-- Use Read to load all available completed sections
-- Extract: primary outcome, key statistics, study design, population, dates, countries, main conclusion
-- Ask: what is the target journal or abstract format? (JAMA Network, Lancet, BMJ, Annals, Nature Medicine, Generic structured, other)
-- Ask: what is the abstract word limit? (JAMA: 350 words, Lancet: 250 words, BMJ: 400 words — check if unsure)
+Read `skills/core/SKILL.md` for shared conventions (prose rules, precision, verification flags, no-fabrication guarantee).
 
-If $ARGUMENTS specifies a section (abstract / introduction / title), write only that section.
+## Step 2: Determine target journal and section
 
-## Step 2 — Write the Structured Abstract
+If provided as argument (`$ARGUMENTS`), use that to determine which section(s) to write (abstract, introduction, title, or all). If not specified, write all three.
 
-Use the format appropriate to the target journal. Default to JAMA Network format unless otherwise specified.
+Check `PAPER_CONTEXT.md` for `Target journal` and `Output format`. If not found, ask the user:
+- What is the target journal or abstract format? (JAMA Network, Lancet, BMJ, Annals, Nature Medicine, Generic structured, other)
+- What is the abstract word limit?
 
-### JAMA Network Format (≤350 words)
-Sections in order:
-1. **Importance** (1–2 sentences: why this question matters)
-2. **Objective** (1 sentence: what this study aimed to do)
-3. **Data Sources** (databases, dates, supplementary searches)
-4. **Study Selection** (design types, population, outcome, comparator)
-5. **Data Extraction and Synthesis** (who extracted, risk of bias tools, statistical methods)
-6. **Main Outcomes and Measures** (primary outcome definition)
-7. **Results** (key numbers: N studies, pooled estimate with 95% CI, heterogeneity, key secondary findings)
-8. **Conclusions and Relevance** (main takeaway, what it means for practice or policy)
+## Step 3: Load output engine and abstract formats
 
-Followed by **Key Points** (outside word count):
-- **Question:** The research question in 1 sentence
-- **Findings:** 2–3 sentences with key quantitative findings
-- **Meaning:** 1–2 sentences on implications
+Read `skills/output/SKILL.md` for export format guidance. Read `skills/output/references/abstract-formats.md` for journal-specific abstract templates and word limits.
 
-### Lancet Format (≤250 words)
-Sections: Background / Methods / Findings / Interpretation / Funding
+Also read `skills/citations/SKILL.md` for citation verification — the Introduction requires verified citations.
 
-### BMJ Format (≤400 words)
-Sections: Objectives / Design / Setting / Participants / Interventions / Main Outcome Measures / Results / Conclusions
+## Step 4: Check for optional integrations
 
-### Generic Structured Format
-Sections: Background / Methods / Results / Conclusions
+Read `skills/integrations/SKILL.md`. Run detection if this is the first command invocation this session. If `scientific-writing` is detected, use its two-stage outline-then-prose workflow. If `research-lookup` integration is detected, use it for Introduction citations.
 
-### Rules for All Abstracts
-- Extract all numbers directly from completed Results — do not paraphrase or round differently
-- Do not cite references in the abstract
-- Do not introduce information not in the manuscript
-- Count words carefully and trim if over limit
-- UK English spelling throughout
+## Step 5: Read completed manuscript sections
 
-## Step 3 — Write the Introduction
+This command REQUIRES completed Results and Discussion sections. Read them first. Also read any completed Methods section.
 
-Write a 4-paragraph structured Introduction:
+If `PAPER_CONTEXT.md` specifies a `Manuscript output` folder, look there. Otherwise, ask the user for the file locations.
+
+Extract from the completed sections:
+- Primary outcome estimate and key statistics
+- Study design, population, dates, countries
+- Main conclusion and implications
+- All numerical values (to cross-check against the Abstract)
+
+## Step 6: Write section by section
+
+Write each section in order, pausing after each for user confirmation.
+
+### Abstract
+
+1. Select the journal-specific format from `skills/output/references/abstract-formats.md`
+2. Draft the structured abstract following the template sections for the target journal
+3. Extract all numbers directly from the completed Results — never round or paraphrase differently than the Results section
+4. Do not cite references in the abstract
+5. Do not introduce information not in the manuscript
+6. After drafting, count words using Bash: `echo "<abstract text>" | wc -w`
+7. Trim if over the word limit; report the final word count
+
+### Introduction
+
+Write a 4-paragraph structured Introduction (~450-475 words total):
 
 **Paragraph 1 — Disease/Problem Burden (~150 words):**
-- Establish global or population-level burden of the condition or problem
-- Cite recent, high-quality epidemiological data (verify before citing)
-- Set the clinical or public health stakes
+- Establish global or population-level burden
+- Cite recent, high-quality epidemiological data (verify via citation engine before citing)
 
-**Paragraph 2 — Evidence Gap (~150 words):**
+**Paragraph 2 — Knowledge Gap (~150 words):**
 - Summarise what is known from prior research
 - Identify the specific gap, uncertainty, or controversy this study addresses
-- State why existing evidence is insufficient (outdated, underpowered, heterogeneous, methodologically limited)
+- State why existing evidence is insufficient
 
-**Paragraph 3 — Study Rationale and Methods Summary (~100 words):**
+**Paragraph 3 — Study Rationale (~100 words):**
 - State what this study did (design, population, outcome)
 - Briefly state the analytic approach
 - Do NOT report results here
 
-**Paragraph 4 — Aims (~50–75 words):**
-- State the primary and secondary aims clearly
-- Use: "This systematic review aimed to..." / "This study aimed to..."
+**Paragraph 4 — Aims (~50-75 words):**
+- State primary and secondary aims clearly
 - One sentence per aim
 
-### Citation Rules for Introduction
-- Use WebSearch and PubMed to verify all citations before including
+**Citation rules for Introduction:**
 - Vancouver numbering from 1
-- Only include real, PubMed-indexed sources
-- Flag unverifiable citations: [Citation needed — unable to verify]
-- Limit to 15–20 strategic citations total
-- Provide full reference list with DOI and PMID at end of section
+- Verify all citations via the citation engine pipeline
+- Limit to 12-18 references total
+- Flag any unverifiable citation: `[Citation needed — unable to verify]`
 
-## Step 4 — Suggest Title Options
+### Title
 
 Generate 3 title variants:
 1. **Descriptive title** — states what was done (design + outcome + population)
@@ -94,16 +91,13 @@ Generate 3 title variants:
 
 For each:
 - Keep under 20 words
-- Include study design in title or subtitle (e.g., "A Systematic Review and Meta-Analysis")
-- Avoid acronyms in the title unless universally understood
+- Include study design in title or subtitle
+- Avoid acronyms unless universally understood
 - Avoid hyperbolic language ("novel", "first", "breakthrough")
 - UK English spelling
 
 Ask the researcher which title they prefer, or offer to combine elements.
 
-## Formatting Rules
-- Output each section as a clearly labelled Markdown section (## heading)
-- Abstract: plain prose, no bullet points
-- Introduction: full paragraphs
-- Titles: numbered list for comparison
-- Word counts reported after abstract draft
+## Step 7: Save output
+
+Ask the user where to save the completed frontmatter sections. Write to file using the Write tool. If `PAPER_CONTEXT.md` specifies a `Manuscript output` folder, suggest saving there.
