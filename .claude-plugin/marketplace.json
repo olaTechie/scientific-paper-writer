@@ -1,0 +1,38 @@
+{
+  "name": "scientific-paper-writer",
+  "metadata": {
+    "description": "Section-by-section academic paper writing assistant for quantitative research. Supports 11 study types, multi-source citation verification, LaTeX/DOCX export.",
+    "version": "1.0.0",
+    "homepage": "https://github.com/olaTechie/scientific-paper-writer"
+  },
+  "owner": {
+    "name": "Ola",
+    "email": ""
+  },
+  "plugins": [
+    {
+      "name": "scientific-paper-writer",
+      "description": "Modular academic manuscript writing assistant with 11 study types, multi-source citation verification, figure generation, and LaTeX/DOCX export",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/core",
+        "./skills/study-types/systematic-review",
+        "./skills/study-types/network-meta-analysis",
+        "./skills/study-types/ipd-meta-analysis",
+        "./skills/study-types/dose-response",
+        "./skills/study-types/bayesian-meta-analysis",
+        "./skills/study-types/rct",
+        "./skills/study-types/observational",
+        "./skills/study-types/economic-evaluation",
+        "./skills/study-types/prediction-model",
+        "./skills/study-types/diagnostic-accuracy",
+        "./skills/study-types/qualitative",
+        "./skills/citations",
+        "./skills/visual",
+        "./skills/output",
+        "./skills/integrations"
+      ]
+    }
+  ]
+}
