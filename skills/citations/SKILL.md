@@ -23,9 +23,8 @@ generation for the scientific-paper-writer plugin. Every citation must be verifi
 against at least one authoritative database before inclusion. No citation may ever
 be fabricated.
 
-> **Note:** This skill resolves the missing v0.2.0 phantom reference
-> `skills/paper-components/references/reference-verification.md` per spec Section 12.2.
-> All reference verification logic is now consolidated here.
+> **Note:** All reference verification logic is consolidated in this skill.
+> The v0.2.0 `skills/paper-components/` directory has been removed.
 
 ---
 

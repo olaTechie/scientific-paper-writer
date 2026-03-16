@@ -22,9 +22,8 @@ This skill handles all figure-related tasks: interpreting uploaded figures,
 generating publication-quality figures from data, and writing structured captions
 that meet journal submission standards.
 
-> **Note:** This skill resolves the missing v0.2.0 phantom reference
-> `skills/paper-components/references/caption-standards.md` per spec Section 12.2.
-> All caption standards and figure type guidance is now consolidated here.
+> **Note:** All caption standards and figure type guidance is consolidated in this skill.
+> The v0.2.0 `skills/paper-components/` directory has been removed.
 
 ---
 

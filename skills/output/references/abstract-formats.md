@@ -3,8 +3,8 @@
 This reference provides complete abstract formatting rules for all supported journal
 types. Every abstract must be verified for word count after drafting.
 
-> **Migrated from:** `skills/paper-components/references/abstract-formats.md`
 > This is the canonical location for abstract format definitions.
+> The v0.2.0 `skills/paper-components/` directory has been removed.
 
 ---
 
