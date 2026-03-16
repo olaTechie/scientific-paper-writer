@@ -1,10 +1,28 @@
 {
   "name": "scientific-paper-writer",
-  "version": "0.2.0",
-  "description": "Section-by-section academic paper writing assistant for quantitative research (systematic reviews, RCTs, cohort studies, ML papers). Guides researchers through Methods (PRISMA/STROBE/TRIPOD), Results, Discussion, Abstract, Introduction, Captions, and References in expert writing order.",
+  "version": "1.0.0",
+  "description": "Modular academic manuscript writing assistant for quantitative research. Supports 10 study types (systematic reviews, network/IPD/dose-response/Bayesian meta-analyses, RCTs, cohort studies, economic evaluations, prediction models, diagnostic accuracy, qualitative). Multi-source citation verification (PubMed, CrossRef, Semantic Scholar, bioRxiv). Figure interpretation and generation. LaTeX and DOCX export with venue-specific templates. Guides researchers through Methods, Results, Discussion, Abstract, Introduction, Captions, and References in expert writing order.",
   "author": {
     "name": "Ola"
   },
-  "keywords": ["scientific-writing", "systematic-review", "meta-analysis", "research", "academic", "manuscript"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/olaTechie/scientific-paper-writer"
+  },
+  "keywords": [
+    "scientific-writing",
+    "systematic-review",
+    "meta-analysis",
+    "network-meta-analysis",
+    "bayesian",
+    "dose-response",
+    "economic-evaluation",
+    "research",
+    "academic",
+    "manuscript",
+    "latex",
+    "docx",
+    "citation-verification"
+  ],
   "license": "MIT"
 }
