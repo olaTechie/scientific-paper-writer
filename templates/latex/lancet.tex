@@ -1,0 +1,139 @@
+% Scientific Paper Writer — The Lancet Template
+% Usage: Place in manuscript/ directory, compile with pdflatex + bibtex
+% Lancet submissions are single-column, double-spaced.
+\documentclass[12pt,a4paper]{article}
+
+% Packages
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}\doublespacing
+\usepackage{times}
+\usepackage{graphicx}
+\usepackage[labelfont=bf]{caption}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{lineno}\linenumbers
+\usepackage{amsmath}
+\usepackage{framed}
+
+% Title page
+\title{\textbf{TITLE}}
+\author{
+  Author One, MD\textsuperscript{1}\textsuperscript{*},
+  Author Two, PhD\textsuperscript{2},
+  Prof Author Three, MD\textsuperscript{3} \\\\
+  \small\textsuperscript{1}Department, Institution, City, Country \\\\
+  \small\textsuperscript{2}Department, Institution, City, Country \\\\
+  \small\textsuperscript{3}Department, Institution, City, Country \\\\
+  \small\textsuperscript{*}Corresponding author: Name, Department, Institution, Address. \\\\
+  \small Tel: +XX XXX XXXX; email: email@example.com
+}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+% Word count and counts
+\noindent\textbf{Word count (text):} XXXX words (max 4500) \\
+\textbf{Word count (abstract):} XXX words (max 250) \\
+\textbf{Number of tables:} X \\
+\textbf{Number of figures:} X \\
+\textbf{Number of references:} XX (max 50 for Articles)
+
+\newpage
+
+% ============================================================
+% Structured Abstract (max 250 words)
+% ============================================================
+\begin{abstract}
+\noindent\textbf{Background} \\[0.5em]
+\textbf{Methods} \\[0.5em]
+\textbf{Findings} \\[0.5em]
+\textbf{Interpretation} \\[0.5em]
+\textbf{Funding}
+\end{abstract}
+
+\newpage
+
+% ============================================================
+% Research in Context (required for Lancet — separate panel)
+% ============================================================
+\begin{framed}
+\noindent\textbf{Research in Context}
+
+\textbf{Evidence before this study} \\
+We searched [databases] from [start date] to [end date] using the terms [search terms]. We found [summary of existing evidence]. [Identify the gap.]
+
+\textbf{Added value of this study} \\
+[2--3 sentences describing what this study adds to the evidence base. Be specific about novelty.]
+
+\textbf{Implications of all the available evidence} \\
+[2--3 sentences on what the totality of evidence means for clinical practice, policy, or future research.]
+\end{framed}
+
+\newpage
+
+% ============================================================
+% Main text
+% ============================================================
+\section{Introduction}
+% INSERT INTRODUCTION HERE
+% Lancet guidelines: Brief (2-3 short paragraphs). End with clear study aim.
+% No subheadings within Introduction.
+
+\section{Methods}
+% INSERT METHODS HERE
+% Include: Study design, Setting, Participants, Procedures, Outcomes, Statistical analysis
+% End with: "This study is reported in accordance with [PRISMA/STROBE/CONSORT]."
+% Lancet requires registration statement for trials and systematic reviews.
+
+\subsection{Study design and participants}
+% INSERT HERE
+
+\subsection{Procedures}
+% INSERT HERE
+
+\subsection{Outcomes}
+% INSERT HERE
+
+\subsection{Statistical analysis}
+% INSERT HERE
+
+\subsection{Role of the funding source}
+% The funder of the study had [no role / the following role] in study design, data
+% collection, data analysis, data interpretation, or writing of the report.
+
+\section{Results}
+% INSERT RESULTS HERE
+
+\section{Discussion}
+% INSERT DISCUSSION HERE
+% Lancet guidelines: Start with a brief summary of findings (1 paragraph).
+% Compare with existing evidence. Discuss strengths and limitations.
+% End with implications and future directions.
+
+% ============================================================
+% References — Lancet uses numbered references in order of appearance
+% Style: Vancouver (with journal abbreviations)
+% ============================================================
+\bibliographystyle{vancouver}
+\bibliography{references}
+
+% ============================================================
+% Supplementary — Lancet calls this "Appendix"
+% ============================================================
+\newpage
+\appendix
+\section*{Appendix}
+
+\subsection*{Supplementary methods}
+% INSERT SUPPLEMENTARY METHODS HERE
+
+\subsection*{Supplementary tables}
+% INSERT SUPPLEMENTARY TABLES HERE
+
+\subsection*{Supplementary figures}
+% INSERT SUPPLEMENTARY FIGURES HERE
+
+\end{document}

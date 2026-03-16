@@ -1,0 +1,74 @@
+% Scientific Paper Writer — Generic Article Template
+% Usage: Place in manuscript/ directory, compile with pdflatex + bibtex
+\documentclass[12pt,a4paper]{article}
+
+% Packages
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}\doublespacing
+\usepackage{times}
+\usepackage{graphicx}
+\usepackage[labelfont=bf]{caption}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{lineno}\linenumbers
+\usepackage{amsmath}
+
+% Title page
+\title{\textbf{TITLE}}
+\author{
+  Author One\textsuperscript{1},
+  Author Two\textsuperscript{2} \\\\
+  \small\textsuperscript{1}Department, Institution, City, Country \\\\
+  \small\textsuperscript{2}Department, Institution, City, Country \\\\
+  \small Corresponding author: email@example.com
+}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+% Word count
+\noindent\textbf{Word count:} XXXX words \\
+\textbf{Number of tables:} X \\
+\textbf{Number of figures:} X
+
+\newpage
+
+% Abstract
+\begin{abstract}
+\noindent\textbf{Background:} \\
+\textbf{Methods:} \\
+\textbf{Results:} \\
+\textbf{Conclusions:}
+\end{abstract}
+
+\textbf{Keywords:} keyword1, keyword2, keyword3
+
+\newpage
+
+% Main text
+\section{Introduction}
+% INSERT INTRODUCTION HERE
+
+\section{Methods}
+% INSERT METHODS HERE
+
+\section{Results}
+% INSERT RESULTS HERE
+
+\section{Discussion}
+% INSERT DISCUSSION HERE
+
+% References
+\bibliographystyle{vancouver}
+\bibliography{references}
+
+% Supplementary
+\newpage
+\appendix
+\section*{Supplementary Materials}
+% INSERT SUPPLEMENTARY HERE
+
+\end{document}
