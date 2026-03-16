@@ -14,7 +14,7 @@
       "name": "scientific-paper-writer",
       "description": "Modular academic manuscript writing assistant with 11 study types, multi-source citation verification, figure generation, and LaTeX/DOCX export",
       "source": "./",
-      "strict": false,
+      "strict": true,
       "skills": [
         "./skills/core",
         "./skills/study-types/systematic-review",
