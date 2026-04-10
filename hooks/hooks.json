@@ -1,13 +1,13 @@
 {
   "hooks": {
-    "SessionStart": [
+    "UserPromptSubmit": [
       {
         "matcher": "",
         "hooks": [
           {
-            "type": "prompt",
-            "prompt": "At the start of this session, check if a file named PAPER_CONTEXT.md exists in the user's working folder. If it exists, read it silently and use the study details (study type, primary outcome, target journal, citation style, output format, folder structure, integration preferences, figure generation preferences) to pre-load context for all writing commands. Do not announce this to the user unless they ask — simply use the context when they invoke writing commands. If the file does not exist, do nothing.",
-            "timeout": 15
+            "type": "command",
+            "command": "test -f PAPER_CONTEXT.md && echo 'PAPER_CONTEXT.md detected — use study details (study type, primary outcome, target journal, citation style, output format, folder structure, integration preferences, figure generation preferences) to pre-load context for writing commands.' || echo 'OK'",
+            "timeout": 5
           }
         ]
       }
